@@ -1,10 +1,22 @@
 const express=require('express')
 const http=require('http')
 const socketIo=require('socket.io')
+const cors = require('cors')
+
 
 let app=express()
 let server=http.createServer(app)
-let io=socketIo(server)
+
+app.use(cors())
+
+const io = socketIo(server, {
+    cors: {
+      origin: "http://localhost:5173", 
+      methods: ["GET", "POST"],
+      allowedHeaders: ["my-custom-header"],
+      credentials: true,
+    },
+  });
 
 io.on('connection',(socket)=>{
     socket.on('offer',(offer)=>{
